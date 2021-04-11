@@ -27,7 +27,5 @@ if (isset($request->message)) {
 	}else{
 		file_get_contents("https://api.telegram.org/bot$tokenbot/sendMessage?chat_id=".$request->message->chat->id."&text=".urlencode("Cara penggunaan ketik /cari [Nama Musik ]"));
 	}
-	else {
-		file_get_contents(filename)
-	}
+	
 }
