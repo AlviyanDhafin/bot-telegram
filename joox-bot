@@ -1,0 +1,33 @@
+<?php 
+$tokenbot = "	";
+$request = json_decode(file_get_contents("php://input"));
+if (isset($request->message)) {
+	$text = $request->message->text;
+	if (strstr($text, "/cari ")) {
+		$judul_lagu = str_replace('/cari ', '', $text);
+		$request_api = file_get_contents("http://public-restapi.herokuapp.com/api/joox/search?q=".urlencode($judul_lagu));
+		var_dump($request_api);
+		$result_decode = json_decode($request_api);
+		$songs = $result_decode->songs;
+		$no=0;
+		$result = "Silahkan pilih lagu dibawah ini :\n";
+		foreach ($songs as $lagu) {
+			$no++;
+			if ( $no < 5 ) {
+				$result .= "Title : ".$lagu->title." - ".$lagu->singerName."\nklik -> /download".$lagu->id."\n\n";
+				$true = 1;
+			}
+		}
+		$result .= "Created By @musabatechnopark";
+		if ($true==1) {
+			file_get_contents("https://api.telegram.org/bot$tokenbot/sendMessage?chat_id=".$request->message->chat->id."&text=".urlencode($result));
+		}else{
+			file_get_contents("https://api.telegram.org/bot$tokenbot/sendMessage?chat_id=".$request->message->chat->id."&text=".urlencode("Lagu Tidak Ditemukan!"));
+		}
+	}else{
+		file_get_contents("https://api.telegram.org/bot$tokenbot/sendMessage?chat_id=".$request->message->chat->id."&text=".urlencode("Cara penggunaan ketik /cari [Nama Musik ]"));
+	}
+	else {
+		file_get_contents(filename)
+	}
+}
